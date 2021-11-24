@@ -1,0 +1,28 @@
+.top-bar {
+  position: fixed;
+  padding-top: 12px;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 50px;
+  background-color: #0069d9;
+  color: white;
+}
+
+.alternatives button {
+  display: inline-block;
+  margin: 10px;
+  font-size: 2.5em;
+}
+
+.main-app {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
