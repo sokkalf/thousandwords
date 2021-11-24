@@ -18,6 +18,8 @@ import Random exposing (Generator)
 import Dict
 import Random.List
 import Set
+import Process
+import Task
 
 
 -- MAIN
@@ -45,6 +47,11 @@ type alias Word =
     , english : String
     }
 
+type alias Alternative =
+    { word: String
+    , correct : Bool
+    }
+
 
 type alias Model =
     { number : { a : Int, b : Int, c : Int, d : Int }
@@ -52,8 +59,8 @@ type alias Model =
     , streak : Int
     , words : List Word
     , numWords : Int
-    , alternatives : List (Html Msg)
-    , answer : Int
+    , alternatives : List Alternative
+    , answered : Bool
     }
 
 
@@ -65,7 +72,7 @@ init _ =
       , words = []
       , numWords = 0
       , alternatives = []
-      , answer = 0
+      , answered = False
       }
     , Cmd.batch [ getWords, getRandomNumber 1000 ]
     )
@@ -80,18 +87,20 @@ type Msg
     | ReceiveData
     | GotRandomInt { a : Int, b : Int, c : Int, d : Int }
     | GetRandomInt
-    | GotShuffledList (List (Html Msg))
+    | GotShuffledList (List Alternative)
     | CorrectAnswer
-    | WrongAnswer Int
-
+    | WrongAnswer
+    | DisplayAnswer
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        DisplayAnswer ->
+            ({model | answered = True}, (delay 1000.0 GetRandomInt))
         CorrectAnswer ->
-            update GetRandomInt { model | score = model.score + 1, streak = model.streak + 1 }
-        WrongAnswer n ->
-            update GetRandomInt { model | streak = 0 }
+            update DisplayAnswer { model | answered = True, score = model.score + 1, streak = model.streak + 1 }
+        WrongAnswer ->
+            update DisplayAnswer { model | answered = True, streak = 0 }
         ReceiveData ->
             ( model, getWords )
 
@@ -102,7 +111,7 @@ update msg model =
             case ([a, b, c, d] |> Set.fromList |> Set.toList |> List.length) of
                -- if there are any less than 4 unique numbers, that means at least one is not unique
                -- this results in problems, so we just go again and generate a new set of numbers
-               4 -> ( { model | number = n }, shuffleAlternatives(viewLangAlternatives { model | number = n} "spanish") )
+               4 -> ( { model | number = n, answered = False }, shuffleAlternatives(genLangAlternatives { model | number = n} "spanish") )
                _ -> update GetRandomInt model
 
         GotShuffledList alts ->
@@ -129,12 +138,17 @@ view model =
     div []
         [ div [ class "top-bar" ] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak ) ]
         , h1 [] [ text ((getEntry model.words model.number.a).norwegian) ]
-        , div [ class "alternatives" ] (model.alternatives)
+        , div [ class "alternatives" ] (viewLangAlternatives model)
         ]
 
 
-viewLangAlternatives : Model -> String -> List (Html Msg)
-viewLangAlternatives model lang =
+viewLangAlternatives : Model -> List (Html Msg)
+viewLangAlternatives model =
+    List.map (\alt -> button [ classList [("btn-primary", True),("btn-success", alt.correct && model.answered),("btn-danger", (alt.correct == False) && model.answered)]
+                             , onClick (if alt.correct == True then CorrectAnswer else WrongAnswer) ] [ text (alt.word) ]) model.alternatives
+
+genLangAlternatives : Model -> String -> List Alternative
+genLangAlternatives model lang =
     let
       accessors = Dict.fromList
                                [ ("spanish" , .spanish)
@@ -173,11 +187,17 @@ viewLangAlternatives model lang =
               acc (getEntry model.words model.number.d)                                          
     in
     [
-      button [ classList [("btn-primary", True),("btn-success", model.answer == 1)], onClick CorrectAnswer ] [ text (word1) ]
-    , button [ classList [("btn-primary", True),("btn-danger", model.answer == 2)], onClick (WrongAnswer 2) ] [ text (word2) ]
-    , button [ classList [("btn-primary", True),("btn-danger", model.answer == 3)], onClick (WrongAnswer 3) ] [ text (word3) ]
-    , button [ classList [("btn-primary", True),("btn-danger", model.answer == 4)], onClick (WrongAnswer 4) ] [ text (word4) ]
+      {word = word1, correct = True},
+      {word = word2, correct = False},
+      {word = word3, correct = False},
+      {word = word4, correct = False}
     ]
+
+delay : Float -> msg -> Cmd msg
+delay time msg =
+  Process.sleep time
+  |> Task.andThen (always <| Task.succeed msg)
+  |> Task.perform identity
 
 getRandomNumber : Int -> Cmd Msg
 getRandomNumber max =
@@ -199,7 +219,7 @@ getEntry words n =
     in
     val
 
-shuffleAlternatives : List (Html Msg) -> Cmd Msg
+shuffleAlternatives : List (Alternative) -> Cmd Msg
 shuffleAlternatives list =
     Random.generate GotShuffledList (list |> Random.List.shuffle)
 
