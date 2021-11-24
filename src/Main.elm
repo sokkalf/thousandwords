@@ -148,7 +148,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ div [ class "top-bar" ] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
-        , h1 [] [ text (getEntry model.words model.number.a).norwegian ]
+        , h1 [ class "question" ] [ text (getEntry model.words model.number.a).norwegian ]
         , div [ class "alternatives" ] (viewLangAlternatives model)
         ]
 

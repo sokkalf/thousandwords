@@ -9,6 +9,9 @@
   background-color: #0069d9;
   color: white;
 }
+.question {
+  font-size: 5em;
+}
 
 .alternatives button {
   display: inline-block;
