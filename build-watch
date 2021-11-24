@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+FILES="src/*"
+CHECK1=$(stat $FILES)
+echo "Watching for changes.."
+while true
+do
+  CHECK2=$(stat $FILES)
+  if [[ "$CHECK2" != "$CHECK1" ]]
+  then
+    echo "Rebuilding.."
+    elm make $FILES --debug --output=elm.js
+    CHECK1=$CHECK2
+  fi
+  sleep 1
+done
+
