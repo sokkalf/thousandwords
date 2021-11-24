@@ -8,18 +8,19 @@ module Main exposing (..)
 
 import Array
 import Browser
-import Html exposing (Html, button, div, text, h1)
+import Dict
+import Html exposing (Html, button, div, h1, text)
+import Html.Attributes exposing (class, classList)
 import Html.Events exposing (onClick)
-import Html.Attributes exposing(class, classList)
 import Http
 import Json.Decode exposing (Decoder, field, float, int, string)
 import Json.Decode.Pipeline exposing (hardcoded, optional, required)
+import Process
 import Random exposing (Generator)
-import Dict
 import Random.List
 import Set
-import Process
 import Task
+
 
 
 -- MAIN
@@ -38,6 +39,7 @@ main =
 
 -- MODEL
 
+
 type alias Word =
     { spanish : String
     , italian : String
@@ -47,8 +49,9 @@ type alias Word =
     , english : String
     }
 
+
 type alias Alternative =
-    { word: String
+    { word : String
     , correct : Bool
     }
 
@@ -92,30 +95,38 @@ type Msg
     | WrongAnswer
     | DisplayAnswer
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         DisplayAnswer ->
-            ({model | answered = True}, (delay 1000.0 GetRandomInt))
+            ( { model | answered = True }, delay 1000.0 GetRandomInt )
+
         CorrectAnswer ->
             update DisplayAnswer { model | answered = True, score = model.score + 1, streak = model.streak + 1 }
+
         WrongAnswer ->
             update DisplayAnswer { model | answered = True, streak = 0 }
+
         ReceiveData ->
             ( model, getWords )
 
         GotRandomInt n ->
             let
-              {a, b, c, d} = n
+                { a, b, c, d } =
+                    n
             in
-            case ([a, b, c, d] |> Set.fromList |> Set.toList |> List.length) of
-               -- if there are any less than 4 unique numbers, that means at least one is not unique
-               -- this results in problems, so we just go again and generate a new set of numbers
-               4 -> ( { model | number = n, answered = False }, shuffleAlternatives(genLangAlternatives { model | number = n} "spanish") )
-               _ -> update GetRandomInt model
+            case [ a, b, c, d ] |> Set.fromList |> Set.toList |> List.length of
+                -- if there are any less than 4 unique numbers, that means at least one is not unique
+                -- this results in problems, so we just go again and generate a new set of numbers
+                4 ->
+                    ( { model | number = n, answered = False }, shuffleAlternatives (genLangAlternatives { model | number = n } "spanish") )
+
+                _ ->
+                    update GetRandomInt model
 
         GotShuffledList alts ->
-            ( {model | alternatives = alts } , Cmd.none )
+            ( { model | alternatives = alts }, Cmd.none )
 
         GetRandomInt ->
             ( model, getRandomNumber model.numWords )
@@ -136,68 +147,89 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [ class "top-bar" ] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak ) ]
-        , h1 [] [ text ((getEntry model.words model.number.a).norwegian) ]
+        [ div [ class "top-bar" ] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
+        , h1 [] [ text (getEntry model.words model.number.a).norwegian ]
         , div [ class "alternatives" ] (viewLangAlternatives model)
         ]
 
 
 viewLangAlternatives : Model -> List (Html Msg)
 viewLangAlternatives model =
-    List.map (\alt -> button [ classList [("btn-primary", True),("btn-success", alt.correct && model.answered),("btn-danger", (alt.correct == False) && model.answered)]
-                             , onClick (if alt.correct == True then CorrectAnswer else WrongAnswer) ] [ text (alt.word) ]) model.alternatives
+    List.map
+        (\alt ->
+            button
+                [ classList [ ( "btn-primary", True ), ( "btn-success", alt.correct && model.answered ), ( "btn-danger", (alt.correct == False) && model.answered ) ]
+                , onClick
+                    (if alt.correct == True then
+                        CorrectAnswer
+
+                     else
+                        WrongAnswer
+                    )
+                ]
+                [ text alt.word ]
+        )
+        model.alternatives
+
 
 genLangAlternatives : Model -> String -> List Alternative
 genLangAlternatives model lang =
     let
-      accessors = Dict.fromList
-                               [ ("spanish" , .spanish)
-                               , ("italian" , .italian)
-                               , ("portuguese" , .portuguese)
-                               , ("french" , .french)
-                               , ("norwegian" , .norwegian)
-                               , ("english" , .english)]
+        accessors =
+            Dict.fromList
+                [ ( "spanish", .spanish )
+                , ( "italian", .italian )
+                , ( "portuguese", .portuguese )
+                , ( "french", .french )
+                , ( "norwegian", .norwegian )
+                , ( "english", .english )
+                ]
 
-      word1 =
-        case Dict.get lang accessors of
-           Nothing ->
-              "unknown"
-           Just acc ->
-              acc (getEntry model.words model.number.a)
+        word1 =
+            case Dict.get lang accessors of
+                Nothing ->
+                    "unknown"
 
-      word2 =
-        case Dict.get lang accessors of
-           Nothing ->
-              "unknown"
-           Just acc ->
-              acc (getEntry model.words model.number.b)
+                Just acc ->
+                    acc (getEntry model.words model.number.a)
 
-      word3 =
-        case Dict.get lang accessors of
-           Nothing ->
-              "unknown"
-           Just acc ->
-              acc (getEntry model.words model.number.c)
+        word2 =
+            case Dict.get lang accessors of
+                Nothing ->
+                    "unknown"
 
-      word4 =
-        case Dict.get lang accessors of
-           Nothing ->
-              "unknown"
-           Just acc ->
-              acc (getEntry model.words model.number.d)                                          
+                Just acc ->
+                    acc (getEntry model.words model.number.b)
+
+        word3 =
+            case Dict.get lang accessors of
+                Nothing ->
+                    "unknown"
+
+                Just acc ->
+                    acc (getEntry model.words model.number.c)
+
+        word4 =
+            case Dict.get lang accessors of
+                Nothing ->
+                    "unknown"
+
+                Just acc ->
+                    acc (getEntry model.words model.number.d)
     in
-    [
-      {word = word1, correct = True},
-      {word = word2, correct = False},
-      {word = word3, correct = False},
-      {word = word4, correct = False}
+    [ { word = word1, correct = True }
+    , { word = word2, correct = False }
+    , { word = word3, correct = False }
+    , { word = word4, correct = False }
     ]
+
 
 delay : Float -> msg -> Cmd msg
 delay time msg =
-  Process.sleep time
-  |> Task.andThen (always <| Task.succeed msg)
-  |> Task.perform identity
+    Process.sleep time
+        |> Task.andThen (always <| Task.succeed msg)
+        |> Task.perform identity
+
 
 getRandomNumber : Int -> Cmd Msg
 getRandomNumber max =
@@ -219,11 +251,16 @@ getEntry words n =
     in
     val
 
-shuffleAlternatives : List (Alternative) -> Cmd Msg
+
+shuffleAlternatives : List Alternative -> Cmd Msg
 shuffleAlternatives list =
     Random.generate GotShuffledList (list |> Random.List.shuffle)
 
+
+
 -- Generates a record with 4 random numbers
+
+
 quad : Generator a -> Generator b -> Generator c -> Generator d -> Generator { a : a, b : b, c : c, d : d }
 quad genA genB genC genD =
     Random.map4 (\a b c d -> { a = a, b = b, c = c, d = d }) genA genB genC genD
