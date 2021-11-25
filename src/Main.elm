@@ -3,8 +3,8 @@ module Main exposing (..)
 import Array
 import Browser
 import Dict exposing (Dict)
-import Html exposing (Html, button, div, h1, p, text)
-import Html.Attributes exposing (class, classList)
+import Html exposing (Html, a, button, div, h1, p, text)
+import Html.Attributes exposing (class, classList, title)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing (Decoder, field, float, int, string)
@@ -160,11 +160,11 @@ view model =
     in
     div []
         [ div [ class "top-bar" ]
-            [ div [ class "source-language-select" ] [ p [] [ text sourceLang.flag ] ]
+            [ div [ class "source-language-select" ] [ a [ title (sourceLang.localName |> capitalize) ] [ p [] [ text sourceLang.flag ] ] ]
             , div [ class "score" ]
                 [ p [] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
                 ]
-            , div [ class "target-language-select" ] [ p [] [ text targetLang.flag ] ]
+            , div [ class "target-language-select" ] [ a [ title (targetLang.localName |> capitalize) ] [ p [] [ text targetLang.flag ] ] ]
             ]
         , div [ class "container" ]
             [ h1 [ class "question" ] [ text (getSourceWord model) ]
@@ -304,6 +304,16 @@ shuffleAlternatives list =
 quad : Generator a -> Generator b -> Generator c -> Generator d -> Generator { a : a, b : b, c : c, d : d }
 quad genA genB genC genD =
     Random.map4 (\a b c d -> { a = a, b = b, c = c, d = d }) genA genB genC genD
+
+
+capitalize : String -> String
+capitalize string =
+    case String.uncons string of
+        Nothing ->
+            ""
+
+        Just ( head, tail ) ->
+            String.cons (Char.toUpper head) tail
 
 
 
