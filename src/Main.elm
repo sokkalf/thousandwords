@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Array
 import Browser
-import Dict
+import Dict exposing (Dict)
 import Html exposing (Html, button, div, h1, p, text)
 import Html.Attributes exposing (class, classList)
 import Html.Events exposing (onClick)
@@ -47,6 +47,13 @@ type alias Word =
 type alias Alternative =
     { word : String
     , correct : Bool
+    }
+
+
+type alias LanguageMetadata =
+    { flag : String
+    , code : String
+    , localName : String
     }
 
 
@@ -146,11 +153,11 @@ view : Model -> Html Msg
 view model =
     div []
         [ div [ class "top-bar" ]
-            [ div [ class "source-language-select" ] [ p [] [ text "ES" ] ]
+            [ div [ class "source-language-select" ] [ p [] [ text (langMetadata model.sourceLanguage).flag ] ]
             , div [ class "score" ]
                 [ p [] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
                 ]
-            , div [ class "target-language-select" ] [ p [] [ text "NO" ] ]
+            , div [ class "target-language-select" ] [ p [] [ text (langMetadata model.targetLanguage).flag ] ]
             ]
         , div [ class "container" ]
             [ h1 [ class "question" ] [ text (getEntry model.words model.number.a).norwegian ]
@@ -178,6 +185,25 @@ viewLangAlternatives model =
                 [ text alt.word ]
         )
         model.alternatives
+
+
+langMetadata : String -> LanguageMetadata
+langMetadata lang =
+    let
+        languages =
+            Dict.fromList
+                [ ( "spanish", LanguageMetadata "🇪🇸" "ES" "español" )
+                , ( "italian", LanguageMetadata "🇮🇹" "IT" "italiano" )
+                , ( "french", LanguageMetadata "🇫🇷" "FR" "français" )
+                , ( "portuguese", LanguageMetadata "🇵🇹" "PT" "português" )
+                , ( "norwegian", LanguageMetadata "🇳🇴" "NO" "norsk" )
+                , ( "english", LanguageMetadata "🇬🇧" "EN" "english" )
+                ]
+
+        maybeLang =
+            Dict.get lang languages
+    in
+    Maybe.withDefault (LanguageMetadata "🏴\u{200D}☠" "??" "unknown") maybeLang
 
 
 genLangAlternatives : Model -> String -> List Alternative
