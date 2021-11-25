@@ -48,6 +48,14 @@
   color: white;
 }
 
+.scoreboard > span {
+  margin-left: 5px;
+}
+
+.score-value {
+  font-weight: bold;
+}
+
 .container {
   text-align: center;
   align-items: center;

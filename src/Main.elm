@@ -3,7 +3,7 @@ module Main exposing (..)
 import Array
 import Browser
 import Dict exposing (Dict)
-import Html exposing (Html, a, button, div, h1, p, text)
+import Html exposing (Html, a, button, div, h1, p, span, text)
 import Html.Attributes exposing (class, classList, title)
 import Html.Events exposing (onClick)
 import Http
@@ -162,7 +162,12 @@ view model =
         [ div [ class "top-bar" ]
             [ div [ class "source-language-select" ] [ a [ title (sourceLang.localName |> capitalize) ] [ p [] [ text sourceLang.flag ] ] ]
             , div [ class "score" ]
-                [ p [] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
+                [ div [ class "scoreboard" ]
+                    [ span [] [ text "Score :" ]
+                    , span [ class "score-value" ] [ text (String.fromInt model.score) ]
+                    , span [] [ text "Streak :" ]
+                    , span [ class "score-value" ] [ text (String.fromInt model.streak) ]
+                    ]
                 ]
             , div [ class "target-language-select" ] [ a [ title (targetLang.localName |> capitalize) ] [ p [] [ text targetLang.flag ] ] ]
             ]
