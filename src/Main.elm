@@ -151,16 +151,23 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
+    let
+        targetLang =
+            langMetadata model.targetLanguage
+
+        sourceLang =
+            langMetadata model.sourceLanguage
+    in
     div []
         [ div [ class "top-bar" ]
-            [ div [ class "source-language-select" ] [ p [] [ text (langMetadata model.sourceLanguage).flag ] ]
+            [ div [ class "source-language-select" ] [ p [] [ text sourceLang.flag ] ]
             , div [ class "score" ]
                 [ p [] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
                 ]
-            , div [ class "target-language-select" ] [ p [] [ text (langMetadata model.targetLanguage).flag ] ]
+            , div [ class "target-language-select" ] [ p [] [ text targetLang.flag ] ]
             ]
         , div [ class "container" ]
-            [ h1 [ class "question" ] [ text (getEntry model.words model.number.a).norwegian ]
+            [ h1 [ class "question" ] [ text (getSourceWord model) ]
             , div [ class "alternatives" ] (viewLangAlternatives model)
             ]
         ]
@@ -204,6 +211,30 @@ langMetadata lang =
             Dict.get lang languages
     in
     Maybe.withDefault (LanguageMetadata "🏴\u{200D}☠" "??" "unknown") maybeLang
+
+
+getSourceWord : Model -> String
+getSourceWord model =
+    let
+        accessors =
+            Dict.fromList
+                [ ( "spanish", .spanish )
+                , ( "italian", .italian )
+                , ( "portuguese", .portuguese )
+                , ( "french", .french )
+                , ( "norwegian", .norwegian )
+                , ( "english", .english )
+                ]
+
+        word =
+            case Dict.get model.sourceLanguage accessors of
+                Nothing ->
+                    "unknown"
+
+                Just acc ->
+                    acc (getEntry model.words model.number.a)
+    in
+    word
 
 
 genLangAlternatives : Model -> String -> List Alternative
