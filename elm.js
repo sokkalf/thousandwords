@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ae.H === region.aj.H)
+	if (region.ah.H === region.am.H)
 	{
-		return 'on line ' + region.ae.H;
+		return 'on line ' + region.ah.H;
 	}
-	return 'on lines ' + region.ae.H + ' through ' + region.aj.H;
+	return 'on lines ' + region.ah.H + ' through ' + region.am.H;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a$,
-		impl.bd,
-		impl.ba,
+		impl.a3,
+		impl.bi,
+		impl.bf,
 		function() { return function() {} }
 	);
 });
@@ -2705,8 +2705,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		s: func(record.s),
-		af: record.af,
-		aa: record.aa
+		ai: record.ai,
+		ac: record.ac
 	}
 });
 
@@ -2975,10 +2975,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.s;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.af;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ai;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.aa) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.ac) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,11 +3928,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a$,
-		impl.bd,
-		impl.ba,
+		impl.a3,
+		impl.bi,
+		impl.bf,
 		function(sendToApp, initialModel) {
-			var view = impl.bf;
+			var view = impl.bk;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a$,
-		impl.bd,
-		impl.ba,
+		impl.a3,
+		impl.bi,
+		impl.bf,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.ac && impl.ac(sendToApp)
-			var view = impl.bf;
+			var divertHrefToApp = impl.ae && impl.ae(sendToApp)
+			var view = impl.bk;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3977,12 +3977,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aS);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aV);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.bc) && (_VirtualDom_doc.title = title = doc.bc);
+				(title !== doc.bh) && (_VirtualDom_doc.title = title = doc.bh);
 			});
 		}
 	);
@@ -4038,12 +4038,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.a2;
-	var onUrlRequest = impl.a3;
+	var onUrlChange = impl.a7;
+	var onUrlRequest = impl.a8;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		ac: function(sendToApp)
+		ae: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.az === next.az
-							&& curr.ao === next.ao
-							&& curr.aw.a === next.aw.a
+							&& curr.aC === next.aC
+							&& curr.ar === next.ar
+							&& curr.az.a === next.az.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		a$: function(flags)
+		a3: function(flags)
 		{
-			return A3(impl.a$, flags, _Browser_getUrl(), key);
+			return A3(impl.a3, flags, _Browser_getUrl(), key);
 		},
-		bf: impl.bf,
-		bd: impl.bd,
-		ba: impl.ba
+		bk: impl.bk,
+		bi: impl.bi,
+		bf: impl.bf
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aZ: 'hidden', aT: 'visibilitychange' }
+		? { a1: 'hidden', aW: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aZ: 'mozHidden', aT: 'mozvisibilitychange' }
+		? { a1: 'mozHidden', aW: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aZ: 'msHidden', aT: 'msvisibilitychange' }
+		? { a1: 'msHidden', aW: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aZ: 'webkitHidden', aT: 'webkitvisibilitychange' }
-		: { aZ: 'hidden', aT: 'visibilitychange' };
+		? { a1: 'webkitHidden', aW: 'webkitvisibilitychange' }
+		: { a1: 'hidden', aW: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aG: _Browser_getScene(),
-		aL: {
-			aN: _Browser_window.pageXOffset,
-			aO: _Browser_window.pageYOffset,
-			aM: _Browser_doc.documentElement.clientWidth,
-			an: _Browser_doc.documentElement.clientHeight
+		aJ: _Browser_getScene(),
+		aO: {
+			aQ: _Browser_window.pageXOffset,
+			aR: _Browser_window.pageYOffset,
+			aP: _Browser_doc.documentElement.clientWidth,
+			aq: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aM: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		an: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aP: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		aq: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aG: {
-				aM: node.scrollWidth,
-				an: node.scrollHeight
+			aJ: {
+				aP: node.scrollWidth,
+				aq: node.scrollHeight
 			},
-			aL: {
-				aN: node.scrollLeft,
-				aO: node.scrollTop,
-				aM: node.clientWidth,
-				an: node.clientHeight
+			aO: {
+				aQ: node.scrollLeft,
+				aR: node.scrollTop,
+				aP: node.clientWidth,
+				aq: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aG: _Browser_getScene(),
-			aL: {
-				aN: x,
-				aO: y,
-				aM: _Browser_doc.documentElement.clientWidth,
-				an: _Browser_doc.documentElement.clientHeight
+			aJ: _Browser_getScene(),
+			aO: {
+				aQ: x,
+				aR: y,
+				aP: _Browser_doc.documentElement.clientWidth,
+				aq: _Browser_doc.documentElement.clientHeight
 			},
-			aV: {
-				aN: x + rect.left,
-				aO: y + rect.top,
-				aM: rect.width,
-				an: rect.height
+			aZ: {
+				aQ: x + rect.left,
+				aR: y + rect.top,
+				aP: rect.width,
+				aq: rect.height
 			}
 		};
 	});
@@ -4448,25 +4448,25 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.aW.a(response)));
+			callback(toTask(request.a_.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.aW.b, xhr)); });
-		$elm$core$Maybe$isJust(request.aK) && _Http_track(router, xhr, request.aK.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.a_.b, xhr)); });
+		$elm$core$Maybe$isJust(request.aN) && _Http_track(router, xhr, request.aN.a);
 
 		try {
-			xhr.open(request.a0, request.be, true);
+			xhr.open(request.a5, request.bj, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.be));
+			return done($elm$http$Http$BadUrl_(request.bj));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		request.aS.a && xhr.setRequestHeader('Content-Type', request.aS.a);
-		xhr.send(request.aS.b);
+		request.aV.a && xhr.setRequestHeader('Content-Type', request.aV.a);
+		xhr.send(request.aV.b);
 
 		return function() { xhr.c = true; xhr.abort(); };
 	});
@@ -4477,13 +4477,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.am; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.ap; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.bb.a || 0;
-	xhr.responseType = request.aW.d;
-	xhr.withCredentials = request.aQ;
+	xhr.timeout = request.bg.a || 0;
+	xhr.responseType = request.a_.d;
+	xhr.withCredentials = request.aT;
 }
 
 
@@ -4504,10 +4504,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		be: xhr.responseURL,
-		a8: xhr.status,
-		a9: xhr.statusText,
-		am: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		bj: xhr.responseURL,
+		bd: xhr.status,
+		be: xhr.statusText,
+		ap: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4602,15 +4602,15 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			a7: event.loaded,
-			aH: event.total
+			bc: event.loaded,
+			aK: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			a5: event.loaded,
-			aH: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			ba: event.loaded,
+			aK: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
 }var $elm$core$Basics$EQ = 1;
@@ -5117,7 +5117,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {al: fragment, ao: host, au: path, aw: port_, az: protocol, aA: query};
+		return {ao: fragment, ar: host, ax: path, az: port_, aC: protocol, aD: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -6180,7 +6180,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.a8));
+					$elm$http$Http$BadStatus(metadata.bd));
 			default:
 				var body = response.b;
 				return A2(
@@ -6208,7 +6208,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {aC: reqs, aI: subs};
+		return {aF: reqs, aL: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -6252,7 +6252,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.aK;
+							var _v4 = req.aN;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -6282,7 +6282,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.aC));
+			A3($elm$http$Http$updateReqs, router, cmds, state.aF));
 	});
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
@@ -6325,7 +6325,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.aI)));
+					state.aL)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -6339,14 +6339,14 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
-					aQ: r.aQ,
-					aS: r.aS,
-					aW: A2(_Http_mapExpect, func, r.aW),
-					am: r.am,
-					a0: r.a0,
-					bb: r.bb,
-					aK: r.aK,
-					be: r.be
+					aT: r.aT,
+					aV: r.aV,
+					a_: A2(_Http_mapExpect, func, r.a_),
+					ap: r.ap,
+					a5: r.a5,
+					bg: r.bg,
+					aN: r.aN,
+					bj: r.bj
 				});
 		}
 	});
@@ -6369,16 +6369,16 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{aQ: false, aS: r.aS, aW: r.aW, am: r.am, a0: r.a0, bb: r.bb, aK: r.aK, be: r.be}));
+			{aT: false, aV: r.aV, a_: r.a_, ap: r.ap, a5: r.a5, bg: r.bg, aN: r.aN, bj: r.bj}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{aS: $elm$http$Http$emptyBody, aW: r.aW, am: _List_Nil, a0: 'GET', bb: $elm$core$Maybe$Nothing, aK: $elm$core$Maybe$Nothing, be: r.be});
+		{aV: $elm$http$Http$emptyBody, a_: r.a_, ap: _List_Nil, a5: 'GET', bg: $elm$core$Maybe$Nothing, aN: $elm$core$Maybe$Nothing, bj: r.bj});
 };
 var $elm$json$Json$Decode$list = _Json_decodeList;
 var $author$project$Main$Word = F6(
 	function (spanish, italian, portuguese, french, norwegian, english) {
-		return {U: english, V: french, X: italian, R: norwegian, _: portuguese, ad: spanish};
+		return {V: english, X: french, Z: italian, R: norwegian, ab: portuguese, ag: spanish};
 	});
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
 var $elm$json$Json$Decode$field = _Json_decodeField;
@@ -6418,8 +6418,8 @@ var $author$project$Main$wordDecoder = A3(
 var $author$project$Main$wordsDecoder = $elm$json$Json$Decode$list($author$project$Main$wordDecoder);
 var $author$project$Main$getWords = $elm$http$Http$get(
 	{
-		aW: A2($elm$http$Http$expectJson, $author$project$Main$GotWords, $author$project$Main$wordsDecoder),
-		be: '/words.json'
+		a_: A2($elm$http$Http$expectJson, $author$project$Main$GotWords, $author$project$Main$wordsDecoder),
+		bj: '/words.json'
 	});
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
@@ -6429,7 +6429,9 @@ var $author$project$Main$init = function (_v0) {
 			S: 0,
 			m: {F: 0, O: 0, P: 0, Q: 0},
 			I: 0,
+			af: 'norwegian',
 			C: 0,
+			T: 'spanish',
 			o: _List_Nil
 		},
 		$elm$core$Platform$Cmd$batch(
@@ -6573,7 +6575,7 @@ var $author$project$Main$getEntry = F2(
 			$elm$core$Array$fromList(words));
 		var val = A2(
 			$elm$core$Maybe$withDefault,
-			{U: 'null', V: 'null', X: 'null', R: 'null', _: 'null', ad: 'null'},
+			{V: 'null', X: 'null', Z: 'null', R: 'null', ab: 'null', ag: 'null'},
 			maybeVal);
 		return val;
 	});
@@ -6585,22 +6587,22 @@ var $author$project$Main$genLangAlternatives = F2(
 					_Utils_Tuple2(
 					'spanish',
 					function ($) {
-						return $.ad;
+						return $.ag;
 					}),
 					_Utils_Tuple2(
 					'italian',
 					function ($) {
-						return $.X;
+						return $.Z;
 					}),
 					_Utils_Tuple2(
 					'portuguese',
 					function ($) {
-						return $._;
+						return $.ab;
 					}),
 					_Utils_Tuple2(
 					'french',
 					function ($) {
-						return $.V;
+						return $.X;
 					}),
 					_Utils_Tuple2(
 					'norwegian',
@@ -6610,7 +6612,7 @@ var $author$project$Main$genLangAlternatives = F2(
 					_Utils_Tuple2(
 					'english',
 					function ($) {
-						return $.U;
+						return $.V;
 					})
 				]));
 		var word1 = function () {
@@ -6795,7 +6797,7 @@ var $author$project$Main$update = F2(
 									_Utils_update(
 										model,
 										{m: n}),
-									'spanish')));
+									model.T)));
 					} else {
 						var $temp$msg = $author$project$Main$GetRandomInt,
 							$temp$model = model;
@@ -6849,6 +6851,39 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $author$project$Main$LanguageMetadata = F3(
+	function (flag, code, localName) {
+		return {aX: code, W: flag, a4: localName};
+	});
+var $author$project$Main$langMetadata = function (lang) {
+	var languages = $elm$core$Dict$fromList(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'spanish',
+				A3($author$project$Main$LanguageMetadata, '🇪🇸', 'ES', 'español')),
+				_Utils_Tuple2(
+				'italian',
+				A3($author$project$Main$LanguageMetadata, '🇮🇹', 'IT', 'italiano')),
+				_Utils_Tuple2(
+				'french',
+				A3($author$project$Main$LanguageMetadata, '🇫🇷', 'FR', 'français')),
+				_Utils_Tuple2(
+				'portuguese',
+				A3($author$project$Main$LanguageMetadata, '🇵🇹', 'PT', 'português')),
+				_Utils_Tuple2(
+				'norwegian',
+				A3($author$project$Main$LanguageMetadata, '🇳🇴', 'NO', 'norsk')),
+				_Utils_Tuple2(
+				'english',
+				A3($author$project$Main$LanguageMetadata, '🇬🇧', 'EN', 'english'))
+			]));
+	var maybeLang = A2($elm$core$Dict$get, lang, languages);
+	return A2(
+		$elm$core$Maybe$withDefault,
+		A3($author$project$Main$LanguageMetadata, '🏴\u200D☠', '??', 'unknown'),
+		maybeLang);
+};
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
@@ -6949,7 +6984,8 @@ var $author$project$Main$view = function (model) {
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text('ES')
+										$elm$html$Html$text(
+										$author$project$Main$langMetadata(model.af).W)
 									]))
 							])),
 						A2(
@@ -6982,7 +7018,8 @@ var $author$project$Main$view = function (model) {
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text('NO')
+										$elm$html$Html$text(
+										$author$project$Main$langMetadata(model.T).W)
 									]))
 							]))
 					])),
@@ -7017,12 +7054,12 @@ var $author$project$Main$view = function (model) {
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{
-		a$: $author$project$Main$init,
-		ba: function (_v0) {
+		a3: $author$project$Main$init,
+		bf: function (_v0) {
 			return $elm$core$Platform$Sub$none;
 		},
-		bd: $author$project$Main$update,
-		bf: $author$project$Main$view
+		bi: $author$project$Main$update,
+		bk: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
