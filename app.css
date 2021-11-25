@@ -9,7 +9,15 @@
   background-color: #0069d9;
   color: white;
   box-shadow: 0px 20px 15px 0px rgba(0,0,0,0.72);
+  display: flex;
 }
+
+.top-bar > div {
+  flex: 1;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
 .question {
   font-size: 5em;
 }
@@ -34,13 +42,36 @@
   box-shadow: 15px 20px 15px 0px rgba(0,0,0,0.72);
 }
 
-.main-app {
+.container {
   text-align: center;
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.target-language-select {
+  text-align: right;
+  display: block;
+  float: left;
+}
+
+.source-language-select {
+  text-align: left;
+  display: block;
+  float: right;
+}
+
+.score {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.main-app {
+  background-color: #282c34;
 }

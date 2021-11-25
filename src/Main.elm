@@ -9,7 +9,7 @@ module Main exposing (..)
 import Array
 import Browser
 import Dict
-import Html exposing (Html, button, div, h1, text)
+import Html exposing (Html, button, div, h1, p, text)
 import Html.Attributes exposing (class, classList)
 import Html.Events exposing (onClick)
 import Http
@@ -147,9 +147,17 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [ class "top-bar" ] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
-        , h1 [ class "question" ] [ text (getEntry model.words model.number.a).norwegian ]
-        , div [ class "alternatives" ] (viewLangAlternatives model)
+        [ div [ class "top-bar" ]
+            [ div [ class "source-language-select" ] [ p [] [ text "ES" ] ]
+            , div [ class "score" ]
+                [ p [] [ text ("Score : " ++ String.fromInt model.score ++ " Streak : " ++ String.fromInt model.streak) ]
+                ]
+            , div [ class "target-language-select" ] [ p [] [ text "NO" ] ]
+            ]
+        , div [ class "container" ]
+            [ h1 [ class "question" ] [ text (getEntry model.words model.number.a).norwegian ]
+            , div [ class "alternatives" ] (viewLangAlternatives model)
+            ]
         ]
 
 
