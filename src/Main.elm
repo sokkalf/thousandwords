@@ -58,6 +58,8 @@ type alias Model =
     , numWords : Int
     , alternatives : List Alternative
     , answered : Bool
+    , targetLanguage : String
+    , sourceLanguage : String
     }
 
 
@@ -70,6 +72,8 @@ init _ =
       , numWords = 0
       , alternatives = []
       , answered = False
+      , targetLanguage = "spanish"
+      , sourceLanguage = "norwegian"
       }
     , Cmd.batch [ getWords, getRandomNumber 1000 ]
     )
@@ -114,7 +118,7 @@ update msg model =
                 -- if there are any less than 4 unique numbers, that means at least one is not unique
                 -- this results in problems, so we just go again and generate a new set of numbers
                 4 ->
-                    ( { model | number = n, answered = False }, shuffleAlternatives (genLangAlternatives { model | number = n } "spanish") )
+                    ( { model | number = n, answered = False }, shuffleAlternatives (genLangAlternatives { model | number = n } model.targetLanguage) )
 
                 _ ->
                     update GetRandomInt model
