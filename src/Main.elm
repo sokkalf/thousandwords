@@ -213,8 +213,8 @@ langMetadata lang =
     Maybe.withDefault (LanguageMetadata "🏴\u{200D}☠" "??" "unknown") maybeLang
 
 
-getSourceWord : Model -> String
-getSourceWord model =
+getWord : Model -> String -> Int -> String
+getWord model lang num =
     let
         accessors =
             Dict.fromList
@@ -227,60 +227,35 @@ getSourceWord model =
                 ]
 
         word =
-            case Dict.get model.sourceLanguage accessors of
+            case Dict.get lang accessors of
                 Nothing ->
                     "unknown"
 
                 Just acc ->
-                    acc (getEntry model.words model.number.a)
+                    acc (getEntry model.words num)
     in
     word
+
+
+getSourceWord : Model -> String
+getSourceWord model =
+    getWord model model.sourceLanguage model.number.a
 
 
 genLangAlternatives : Model -> String -> List Alternative
 genLangAlternatives model lang =
     let
-        accessors =
-            Dict.fromList
-                [ ( "spanish", .spanish )
-                , ( "italian", .italian )
-                , ( "portuguese", .portuguese )
-                , ( "french", .french )
-                , ( "norwegian", .norwegian )
-                , ( "english", .english )
-                ]
-
         word1 =
-            case Dict.get lang accessors of
-                Nothing ->
-                    "unknown"
-
-                Just acc ->
-                    acc (getEntry model.words model.number.a)
+            getWord model model.targetLanguage model.number.a
 
         word2 =
-            case Dict.get lang accessors of
-                Nothing ->
-                    "unknown"
-
-                Just acc ->
-                    acc (getEntry model.words model.number.b)
+            getWord model model.targetLanguage model.number.b
 
         word3 =
-            case Dict.get lang accessors of
-                Nothing ->
-                    "unknown"
-
-                Just acc ->
-                    acc (getEntry model.words model.number.c)
+            getWord model model.targetLanguage model.number.c
 
         word4 =
-            case Dict.get lang accessors of
-                Nothing ->
-                    "unknown"
-
-                Just acc ->
-                    acc (getEntry model.words model.number.d)
+            getWord model model.targetLanguage model.number.d
     in
     [ { word = word1, correct = True }
     , { word = word2, correct = False }
