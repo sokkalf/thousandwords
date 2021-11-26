@@ -61,6 +61,7 @@ type alias Model =
     { number : { a : Int, b : Int, c : Int, d : Int }
     , score : Int
     , streak : Int
+    , longestStreak : Int
     , words : List Word
     , numWords : Int
     , alternatives : List Alternative
@@ -75,6 +76,7 @@ init _ =
     ( { number = { a = 0, b = 0, c = 0, d = 0 }
       , score = 0
       , streak = 0
+      , longestStreak = 0
       , words = []
       , numWords = 0
       , alternatives = []
@@ -109,7 +111,15 @@ update msg model =
             update GetRandomInt { model | sourceLanguage = source, targetLanguage = destination }
 
         DisplayAnswer ->
-            ( { model | answered = True }, delay 1000.0 GetRandomInt )
+            let
+                longestStreak =
+                    if model.streak > model.longestStreak then
+                        model.streak
+
+                    else
+                        model.longestStreak
+            in
+            ( { model | answered = True, longestStreak = longestStreak }, delay 1000.0 GetRandomInt )
 
         CorrectAnswer ->
             update DisplayAnswer { model | answered = True, score = model.score + 1, streak = model.streak + 1 }
@@ -171,6 +181,8 @@ view model =
                     , span [ class "score-value" ] [ text (String.fromInt model.score) ]
                     , span [] [ text "Streak :" ]
                     , span [ class "score-value" ] [ text (String.fromInt model.streak) ]
+                    , span [] [ text "Longest streak :" ]
+                    , span [ class "score-value" ] [ text (String.fromInt model.longestStreak) ]
                     ]
                 ]
             , div [ class "target-language-select" ] [ a [ title (targetLang.localName |> capitalize) ] [ p [] [ text targetLang.flag ] ] ]
