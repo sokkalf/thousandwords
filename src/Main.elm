@@ -251,7 +251,7 @@ viewLangSelector model =
                         , p [] [ text ((langMetadata l).localName |> capitalize) ]
                         ]
                 )
-                [ "spanish", "italian", "portuguese", "french", "norwegian", "english" ]
+                [ "spanish", "italian", "french", "portuguese", "norwegian", "english" ]
             )
         ]
     ]
