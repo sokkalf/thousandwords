@@ -3,8 +3,8 @@ module Main exposing (..)
 import Array
 import Browser
 import Dict exposing (Dict)
-import Html exposing (Html, a, button, div, h1, p, span, text)
-import Html.Attributes exposing (class, classList, title)
+import Html exposing (Html, a, button, div, h1, p, small, span, text)
+import Html.Attributes exposing (class, classList, href, title)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing (Decoder, field, float, int, string)
@@ -79,10 +79,10 @@ init _ =
       , numWords = 0
       , alternatives = []
       , answered = False
-      , targetLanguage = "spanish"
-      , sourceLanguage = "norwegian"
+      , targetLanguage = ""
+      , sourceLanguage = ""
       }
-    , Cmd.batch [ getWords, getRandomNumber 1000 ]
+    , getWords
     )
 
 
@@ -99,11 +99,15 @@ type Msg
     | CorrectAnswer
     | WrongAnswer
     | DisplayAnswer
+    | GotLanguages String String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        GotLanguages source destination ->
+            update GetRandomInt { model | sourceLanguage = source, targetLanguage = destination }
+
         DisplayAnswer ->
             ( { model | answered = True }, delay 1000.0 GetRandomInt )
 
@@ -172,9 +176,14 @@ view model =
             , div [ class "target-language-select" ] [ a [ title (targetLang.localName |> capitalize) ] [ p [] [ text targetLang.flag ] ] ]
             ]
         , div [ class "container" ]
-            [ h1 [ class "question" ] [ text (getSourceWord model) ]
-            , div [ class "alternatives" ] (viewLangAlternatives model)
-            ]
+            (if model.targetLanguage == "" || model.sourceLanguage == "" then
+                viewLangSelector model
+
+             else
+                [ h1 [ class "question" ] [ text (getSourceWord model) ]
+                , div [ class "alternatives" ] (viewLangAlternatives model)
+                ]
+            )
         ]
 
 
@@ -199,6 +208,55 @@ viewLangAlternatives model =
         model.alternatives
 
 
+viewLangSelector : Model -> List (Html Msg)
+viewLangSelector model =
+    [ div [ class "lang-selector" ]
+        [ h1 [] [ text "I want to guess what words in this language..." ]
+        , div [ class "lang-selector-list" ]
+            (List.map
+                (\l ->
+                    div [ class "list-lang" ]
+                        [ button
+                            [ class
+                                (if l == model.sourceLanguage then
+                                    "btn-success"
+
+                                 else
+                                    "btn-primary"
+                                )
+                            , onClick (GotLanguages l model.targetLanguage)
+                            ]
+                            [ text (langMetadata l).flag ]
+                        , p [] [ text ((langMetadata l).localName |> capitalize) ]
+                        ]
+                )
+                [ "english", "norwegian", "portuguese", "french", "italian", "spanish" ]
+            )
+        , h1 [] [ text "...means in this language" ]
+        , div [ class "lang-selector-list" ]
+            (List.map
+                (\l ->
+                    div [ class "list-lang" ]
+                        [ button
+                            [ class
+                                (if l == model.targetLanguage then
+                                    "btn-success"
+
+                                 else
+                                    "btn-primary"
+                                )
+                            , onClick (GotLanguages model.sourceLanguage l)
+                            ]
+                            [ text (langMetadata l).flag ]
+                        , p [] [ text ((langMetadata l).localName |> capitalize) ]
+                        ]
+                )
+                [ "spanish", "italian", "portuguese", "french", "norwegian", "english" ]
+            )
+        ]
+    ]
+
+
 langMetadata : String -> LanguageMetadata
 langMetadata lang =
     let
@@ -215,7 +273,7 @@ langMetadata lang =
         maybeLang =
             Dict.get lang languages
     in
-    Maybe.withDefault (LanguageMetadata "🏴\u{200D}☠" "??" "unknown") maybeLang
+    Maybe.withDefault (LanguageMetadata "" "??" "unknown") maybeLang
 
 
 getWord : Model -> String -> Int -> String

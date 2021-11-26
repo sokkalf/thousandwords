@@ -52,6 +52,34 @@
   margin-left: 5px;
 }
 
+.lang-selector {
+  width: 100%;
+}
+
+.lang-selector-list {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.lang-selector button {
+  font-size: 6em;
+}
+
+.list-lang {
+  flex-grow: 1;
+  width: 15%;
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+}
+
+.list-lang p {
+  display: block;
+  text-align: center;
+}
+
 .score-value {
   font-weight: bold;
 }
