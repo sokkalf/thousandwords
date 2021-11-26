@@ -2704,7 +2704,7 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		s: func(record.s),
+		t: func(record.t),
 		aj: record.aj,
 		ae: record.ae
 	}
@@ -2974,7 +2974,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.s;
+		var message = !tag ? value : tag < 3 ? value.a : value.t;
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aj;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
@@ -6236,13 +6236,13 @@ var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			R: _List_Nil,
-			p: false,
+			q: false,
 			V: 0,
-			n: {G: 0, S: 0, T: 0, U: 0},
+			o: {G: 0, S: 0, T: 0, U: 0},
 			L: 0,
-			u: '',
+			m: '',
 			D: 0,
-			i: '',
+			f: '',
 			Q: _List_Nil
 		},
 		$author$project$Main$getWords);
@@ -6437,16 +6437,16 @@ var $author$project$Main$getWord = F3(
 	});
 var $author$project$Main$genLangAlternatives = F2(
 	function (model, lang) {
-		var word4 = A3($author$project$Main$getWord, model, model.i, model.n.U);
-		var word3 = A3($author$project$Main$getWord, model, model.i, model.n.T);
-		var word2 = A3($author$project$Main$getWord, model, model.i, model.n.S);
-		var word1 = A3($author$project$Main$getWord, model, model.i, model.n.G);
+		var word4 = A3($author$project$Main$getWord, model, model.f, model.o.U);
+		var word3 = A3($author$project$Main$getWord, model, model.f, model.o.T);
+		var word2 = A3($author$project$Main$getWord, model, model.f, model.o.S);
+		var word1 = A3($author$project$Main$getWord, model, model.f, model.o.G);
 		return _List_fromArray(
 			[
-				{r: true, F: word1},
-				{r: false, F: word2},
-				{r: false, F: word3},
-				{r: false, F: word4}
+				{s: true, F: word1},
+				{s: false, F: word2},
+				{s: false, F: word3},
+				{s: false, F: word4}
 			]);
 	});
 var $author$project$Main$GotRandomInt = function (a) {
@@ -6729,7 +6729,7 @@ var $author$project$Main$update = F2(
 					var $temp$msg = $author$project$Main$GetRandomInt,
 						$temp$model = _Utils_update(
 						model,
-						{u: source, i: destination});
+						{m: source, f: destination});
 					msg = $temp$msg;
 					model = $temp$model;
 					continue update;
@@ -6737,13 +6737,13 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{p: true}),
+							{q: true}),
 						A2($author$project$Main$delay, 1000.0, $author$project$Main$GetRandomInt));
 				case 5:
 					var $temp$msg = $author$project$Main$DisplayAnswer,
 						$temp$model = _Utils_update(
 						model,
-						{p: true, L: model.L + 1, D: model.D + 1});
+						{q: true, L: model.L + 1, D: model.D + 1});
 					msg = $temp$msg;
 					model = $temp$model;
 					continue update;
@@ -6751,7 +6751,7 @@ var $author$project$Main$update = F2(
 					var $temp$msg = $author$project$Main$DisplayAnswer,
 						$temp$model = _Utils_update(
 						model,
-						{p: true, D: 0});
+						{q: true, D: 0});
 					msg = $temp$msg;
 					model = $temp$model;
 					continue update;
@@ -6773,14 +6773,14 @@ var $author$project$Main$update = F2(
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{p: false, n: n}),
+								{q: false, o: n}),
 							$author$project$Main$shuffleAlternatives(
 								A2(
 									$author$project$Main$genLangAlternatives,
 									_Utils_update(
 										model,
-										{n: n}),
-									model.i)));
+										{o: n}),
+									model.f)));
 					} else {
 						var $temp$msg = $author$project$Main$GetRandomInt,
 							$temp$model = model;
@@ -6851,7 +6851,7 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $author$project$Main$getSourceWord = function (model) {
-	return A3($author$project$Main$getWord, model, model.u, model.n.G);
+	return A3($author$project$Main$getWord, model, model.m, model.o.G);
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $author$project$Main$LanguageMetadata = F3(
@@ -6949,11 +6949,11 @@ var $author$project$Main$viewLangAlternatives = function (model) {
 							$elm$html$Html$Attributes$classList(
 							_List_fromArray(
 								[
-									_Utils_Tuple2('btn-success', alt.r && model.p),
-									_Utils_Tuple2('btn-danger', (!alt.r) && model.p)
+									_Utils_Tuple2('btn-success', alt.s && model.q),
+									_Utils_Tuple2('btn-danger', (!alt.s) && model.q)
 								])),
 							$elm$html$Html$Events$onClick(
-							alt.r ? $author$project$Main$CorrectAnswer : $author$project$Main$WrongAnswer)
+							alt.s ? $author$project$Main$CorrectAnswer : $author$project$Main$WrongAnswer)
 						])),
 				_List_fromArray(
 					[
@@ -6966,6 +6966,15 @@ var $author$project$Main$GotLanguages = F2(
 	function (a, b) {
 		return {$: 8, a: a, b: b};
 	});
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
 var $author$project$Main$viewLangSelector = function (model) {
 	return _List_fromArray(
 		[
@@ -7006,9 +7015,11 @@ var $author$project$Main$viewLangSelector = function (model) {
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$class(
-												_Utils_eq(l, model.u) ? 'btn-success' : 'btn-primary'),
+												_Utils_eq(l, model.m) ? 'btn-success' : (_Utils_eq(l, model.f) ? 'btn-danger' : 'btn-primary')),
 												$elm$html$Html$Events$onClick(
-												A2($author$project$Main$GotLanguages, l, model.i))
+												A2($author$project$Main$GotLanguages, l, model.f)),
+												$elm$html$Html$Attributes$disabled(
+												_Utils_eq(l, model.f))
 											]),
 										_List_fromArray(
 											[
@@ -7057,9 +7068,11 @@ var $author$project$Main$viewLangSelector = function (model) {
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$class(
-												_Utils_eq(l, model.i) ? 'btn-success' : 'btn-primary'),
+												_Utils_eq(l, model.f) ? 'btn-success' : (_Utils_eq(l, model.m) ? 'btn-danger' : 'btn-primary')),
 												$elm$html$Html$Events$onClick(
-												A2($author$project$Main$GotLanguages, model.u, l))
+												A2($author$project$Main$GotLanguages, model.m, l)),
+												$elm$html$Html$Attributes$disabled(
+												_Utils_eq(l, model.m))
 											]),
 										_List_fromArray(
 											[
@@ -7078,13 +7091,13 @@ var $author$project$Main$viewLangSelector = function (model) {
 									]));
 						},
 						_List_fromArray(
-							['spanish', 'italian', 'portuguese', 'french', 'norwegian', 'english'])))
+							['spanish', 'italian', 'french', 'portuguese', 'norwegian', 'english'])))
 				]))
 		]);
 };
 var $author$project$Main$view = function (model) {
-	var targetLang = $author$project$Main$langMetadata(model.i);
-	var sourceLang = $author$project$Main$langMetadata(model.u);
+	var targetLang = $author$project$Main$langMetadata(model.f);
+	var sourceLang = $author$project$Main$langMetadata(model.m);
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -7211,7 +7224,7 @@ var $author$project$Main$view = function (model) {
 					[
 						$elm$html$Html$Attributes$class('container')
 					]),
-				((model.i === '') || (model.u === '')) ? $author$project$Main$viewLangSelector(model) : _List_fromArray(
+				((model.f === '') || (model.m === '')) ? $author$project$Main$viewLangSelector(model) : _List_fromArray(
 					[
 						A2(
 						$elm$html$Html$h1,
