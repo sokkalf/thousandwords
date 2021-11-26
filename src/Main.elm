@@ -4,7 +4,7 @@ import Array
 import Browser
 import Dict exposing (Dict)
 import Html exposing (Html, a, button, div, h1, p, small, span, text)
-import Html.Attributes exposing (class, classList, href, title)
+import Html.Attributes exposing (class, classList, disabled, href, title)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing (Decoder, field, float, int, string)
@@ -221,10 +221,14 @@ viewLangSelector model =
                                 (if l == model.sourceLanguage then
                                     "btn-success"
 
+                                 else if l == model.targetLanguage then
+                                    "btn-danger"
+
                                  else
                                     "btn-primary"
                                 )
                             , onClick (GotLanguages l model.targetLanguage)
+                            , disabled (l == model.targetLanguage)
                             ]
                             [ text (langMetadata l).flag ]
                         , p [] [ text ((langMetadata l).localName |> capitalize) ]
@@ -242,10 +246,14 @@ viewLangSelector model =
                                 (if l == model.targetLanguage then
                                     "btn-success"
 
+                                 else if l == model.sourceLanguage then
+                                    "btn-danger"
+
                                  else
                                     "btn-primary"
                                 )
                             , onClick (GotLanguages model.sourceLanguage l)
+                            , disabled (l == model.sourceLanguage)
                             ]
                             [ text (langMetadata l).flag ]
                         , p [] [ text ((langMetadata l).localName |> capitalize) ]
