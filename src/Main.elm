@@ -248,7 +248,7 @@ viewLangSelector model =
                 )
                 [ "english", "norwegian", "portuguese", "french", "italian", "spanish" ]
             )
-        , h1 [] [ text "...means in this language" ]
+        , h1 [] [ text "...mean in this language" ]
         , div [ class "lang-selector-list" ]
             (List.map
                 (\l ->
