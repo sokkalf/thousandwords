@@ -204,17 +204,16 @@ viewLangAlternatives model =
     List.map
         (\alt ->
             button
-                ([ class "rounded-pill btn-primary" ]
-                    ++ [ classList [ ( "btn-success", alt.correct && model.answered ), ( "btn-danger", (alt.correct == False) && model.answered ) ]
-                       , onClick
-                            (if alt.correct == True then
-                                CorrectAnswer
+                [ class "rounded-pill btn-primary"
+                , classList [ ( "btn-success", alt.correct && model.answered ), ( "btn-danger", (alt.correct == False) && model.answered ) ]
+                , onClick
+                    (if alt.correct == True then
+                        CorrectAnswer
 
-                             else
-                                WrongAnswer
-                            )
-                       ]
-                )
+                     else
+                        WrongAnswer
+                    )
+                ]
                 [ text alt.word ]
         )
         model.alternatives
